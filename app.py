@@ -12,7 +12,11 @@ dbconfig = {
     "password": "",
     "database": "gestion_inventario"
 }
-pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **dbconfig)
+try:
+    pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **dbconfig)
+    print("✅ Pool de conexiones creado correctamente")
+except Error as e:
+    print(f"❌ Error al crear el pool de conexiones: {e}")
 
 def get_db_connection():
     return pool.get_connection()
@@ -111,4 +115,5 @@ def obtener_productos_por_categoria(categoria_id):
 
 # Iniciar el servidor Flask
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False)
+    # Fuerza a Flask a escuchar en 0.0.0.0:5000 (todas las interfaces IPv4)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
